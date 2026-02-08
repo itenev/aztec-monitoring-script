@@ -183,3 +183,4 @@ check_dependencies() {
           printf 'RPC_URL=%s\n' "$RPC_URL"
           printf 'NETWORK=%s\n' "$NETWORK"
       } > .env-aztec-agent
+      chmod 600 .env-aztec-agent 2>/dev/null || true

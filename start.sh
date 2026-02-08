@@ -679,19 +679,20 @@ check_updates_safely() {
 
 
 
-  _find_peer_id_worker &
+  peer_id_tmp=$(mktemp)
+  _find_peer_id_worker "$peer_id_tmp" &
   worker_pid=$!
   spinner $worker_pid
   wait $worker_pid
 
-  if [ ! -s /tmp/peer_id.tmp ]; then
+  if [ ! -s "$peer_id_tmp" ]; then
     echo -e "${RED}$(t "peer_not_found")${NC}"
-    rm -f /tmp/peer_id.tmp
+    rm -f "$peer_id_tmp"
     return 1
   fi
 
-  peer_id=$(< /tmp/peer_id.tmp)
-  rm -f /tmp/peer_id.tmp
+  peer_id=$(< "$peer_id_tmp")
+  rm -f "$peer_id_tmp"
 
   if [ -z "$peer_id" ]; then
     echo -e "${RED}$(t "peer_not_found")${NC}"
@@ -704,19 +705,20 @@ check_updates_safely() {
 
 
   # Запускаем поиск в фоне и спиннер
-  _find_payloads_worker &
+  gov_payloads_tmp=$(mktemp)
+  _find_payloads_worker "$gov_payloads_tmp" &
   worker_pid=$!
   spinner $worker_pid
   wait $worker_pid
 
-  if [ ! -s /tmp/gov_payloads.tmp ]; then
+  if [ ! -s "$gov_payloads_tmp" ]; then
     echo -e "\n${RED}$(t "gov_not_found")${NC}"
-    rm -f /tmp/gov_payloads.tmp
+    rm -f "$gov_payloads_tmp"
     return 1
   fi
 
-  mapfile -t payloads_array < /tmp/gov_payloads.tmp
-  rm -f /tmp/gov_payloads.tmp
+  mapfile -t payloads_array < "$gov_payloads_tmp"
+  rm -f "$gov_payloads_tmp"
 
   echo -e "\n${GREEN}$(t "gov_found_results")${NC}"
   for p in "${payloads_array[@]}"; do
@@ -787,6 +789,8 @@ check_updates_safely() {
       fi
     done
   fi
+
+  chmod 600 "$env_file" 2>/dev/null || true
 
   # === Запрос о дополнительных уведомлениях ===
   if [ -z "$NOTIFICATION_TYPE" ]; then
@@ -859,8 +863,6 @@ source \$HOME/.env-aztec-agent
 CONTRACT_ADDRESS="$CONTRACT_ADDRESS"
 CONTRACT_ADDRESS_MAINNET="$CONTRACT_ADDRESS_MAINNET"
 FUNCTION_SIG="$FUNCTION_SIG"
-TELEGRAM_BOT_TOKEN="$TELEGRAM_BOT_TOKEN"
-TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID"
 LOG_FILE="$LOG_FILE"
 LANG="$LANG"
 
@@ -1629,7 +1631,8 @@ check_publisher_balances
 check_blocks
 EOF
 
-  chmod +x "$AGENT_SCRIPT_PATH/agent.sh"
+  chmod 700 "$AGENT_SCRIPT_PATH/agent.sh"
+  chmod 700 "$AGENT_SCRIPT_PATH"
 
   # Функция для валидации и очистки файла окружения для systemd
   validate_and_clean_env_file() {
@@ -1792,6 +1795,7 @@ EOF
   if systemctl is-active --quiet aztec-agent.timer; then
     echo -e "\n${GREEN}$(t "agent_systemd_added")${NC}"
     echo -e "${GREEN}$(t "agent_timer_status")$(systemctl status aztec-agent.timer --no-pager -q | grep Active)${NC}"
+    echo -e "${YELLOW}Security: Keep $HOME/.env-aztec-agent and $AGENT_SCRIPT_PATH private (they contain secrets).${NC}"
   else
     echo -e "\n${RED}$(t "agent_timer_error")${NC}"
     systemctl status aztec-agent.timer --no-pager

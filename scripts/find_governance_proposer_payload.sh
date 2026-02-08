@@ -12,13 +12,14 @@ find_governance_proposer_payload() {
 
   echo -e "\n${CYAN}$(t "gov_found")${NC}"
 
-  # Вспомогательная функция для запуска поиска в фоне
+  # Вспомогательная функция для запуска поиска в фоне (writes to $1 if set, else /tmp/gov_payloads.tmp for backward compat)
   _find_payloads_worker() {
+    local out="${1:-/tmp/gov_payloads.tmp}"
     docker logs "$container_id" 2>&1 | \
       grep -i '"governanceProposerPayload"' | \
       grep -o '"governanceProposerPayload":"0x[a-fA-F0-9]\{40\}"' | \
       cut -d'"' -f4 | \
       tr '[:upper:]' '[:lower:]' | \
       awk '!seen[$0]++ {print}' | \
-      tail -n 10 > /tmp/gov_payloads.tmp
+      tail -n 10 > "$out"
   }

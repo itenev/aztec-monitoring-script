@@ -21,12 +21,16 @@ change_rpc_url() {
     return 1
   fi
 
+  # Escape NEW_RPC_URL for safe use in sed (delimiter | and special chars \ &)
+  NEW_RPC_URL_SED=$(printf '%s\n' "$NEW_RPC_URL" | sed 's/\\/\\\\/g; s/|/\\|/g; s/&/\\&/g')
+
   # Обновляем или добавляем RPC_URL в файл
   if grep -q "^RPC_URL=" "$ENV_FILE" 2>/dev/null; then
-    sed -i "s|^RPC_URL=.*|RPC_URL=$NEW_RPC_URL|" "$ENV_FILE"
+    sed -i "s|^RPC_URL=.*|RPC_URL=$NEW_RPC_URL_SED|" "$ENV_FILE"
   else
     echo "RPC_URL=$NEW_RPC_URL" >> "$ENV_FILE"
   fi
+  [ -f "$ENV_FILE" ] && chmod 600 "$ENV_FILE" 2>/dev/null || true
 
   echo -e "\n${GREEN}$(t "rpc_change_success")${NC}"
   echo -e "${YELLOW}New RPC URL: $NEW_RPC_URL${NC}"

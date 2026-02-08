@@ -19,6 +19,11 @@ check_proven_block() {
     read -p "$(t "enter_aztec_port_prompt") [${AZTEC_PORT}]: " user_port
 
     if [ -n "$user_port" ]; then
+        # Validate port: numeric and in range 1-65535 (injection prevention)
+        if [[ ! "$user_port" =~ ^[0-9]+$ ]] || (( user_port < 1 || user_port > 65535 )); then
+            echo -e "${RED}Invalid port. Enter a number between 1 and 65535.${NC}"
+            return 1
+        fi
         AZTEC_PORT=$user_port
 
         if grep -q "^AZTEC_PORT=" "$ENV_FILE" 2>/dev/null; then
@@ -39,18 +44,20 @@ check_proven_block() {
 
     echo -e "\n${BLUE}$(t "get_proven_block")${NC}"
 
+    local proven_block_tmp
+    proven_block_tmp=$(mktemp)
     # Фоновый процесс получения блока
     (
         curl -s -X POST -H 'Content-Type: application/json' \
           -d '{"jsonrpc":"2.0","method":"node_getL2Tips","params":[],"id":67}' \
           http://localhost:$AZTEC_PORT | jq -r ".result.proven.number"
-    ) > /tmp/proven_block.tmp &
+    ) > "$proven_block_tmp" &
     pid1=$!
     spinner $pid1
     wait $pid1
 
-    PROVEN_BLOCK=$(< /tmp/proven_block.tmp)
-    rm -f /tmp/proven_block.tmp
+    PROVEN_BLOCK=$(< "$proven_block_tmp")
+    rm -f "$proven_block_tmp"
 
     if [[ -z "$PROVEN_BLOCK" || "$PROVEN_BLOCK" == "null" ]]; then
         echo -e "\n${RED}$(t "proven_block_error")${NC}"
@@ -61,18 +68,20 @@ check_proven_block() {
 
     echo -e "\n${BLUE}$(t "get_sync_proof")${NC}"
 
+    local sync_proof_tmp
+    sync_proof_tmp=$(mktemp)
     # Фоновый процесс получения proof
     (
         curl -s -X POST -H 'Content-Type: application/json' \
           -d "{\"jsonrpc\":\"2.0\",\"method\":\"node_getArchiveSiblingPath\",\"params\":[\"$PROVEN_BLOCK\",\"$PROVEN_BLOCK\"],\"id\":68}" \
           http://localhost:$AZTEC_PORT | jq -r ".result"
-    ) > /tmp/sync_proof.tmp &
+    ) > "$sync_proof_tmp" &
     pid2=$!
     spinner $pid2
     wait $pid2
 
-    SYNC_PROOF=$(< /tmp/sync_proof.tmp)
-    rm -f /tmp/sync_proof.tmp
+    SYNC_PROOF=$(< "$sync_proof_tmp")
+    rm -f "$sync_proof_tmp"
 
     if [[ -z "$SYNC_PROOF" || "$SYNC_PROOF" == "null" ]]; then
         echo -e "\n${RED}$(t "sync_proof_error")${NC}"
