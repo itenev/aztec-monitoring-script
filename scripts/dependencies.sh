@@ -184,3 +184,45 @@ check_dependencies() {
           printf 'NETWORK=%s\n' "$NETWORK"
       } > .env-aztec-agent
       chmod 600 .env-aztec-agent 2>/dev/null || true
+
+      echo -e "\n${GREEN}$(t "env_created")${NC}"
+  else
+      source .env-aztec-agent
+      DISPLAY_NETWORK="${NETWORK:-testnet}"
+      echo -e "\n${GREEN}$(t "env_exists") $RPC_URL, NETWORK: $DISPLAY_NETWORK${NC}"
+  fi
+
+  # === Проверяем и добавляем ключ VERSION в ~/.env-aztec-agent ===
+  # Если ключа VERSION в .env-aztec-agent нет – дописать его, не затронув остальные переменные
+  INSTALLED_VERSION=$(grep '^VERSION=' ~/.env-aztec-agent | cut -d'=' -f2)
+
+  if [ -z "$INSTALLED_VERSION" ]; then
+    printf 'VERSION=%s\n' "$SCRIPT_VERSION" >> ~/.env-aztec-agent
+    INSTALLED_VERSION="$SCRIPT_VERSION"
+  elif [ "$INSTALLED_VERSION" != "$SCRIPT_VERSION" ]; then
+  # Обновляем строку VERSION в .env-aztec-agent
+    sed -i "s/^VERSION=.*/VERSION=$SCRIPT_VERSION/" ~/.env-aztec-agent
+    INSTALLED_VERSION="$SCRIPT_VERSION"
+  fi
+
+  # === Используем локальный version_control.json для определения последней версии ===
+  # Security: Use local file instead of remote download to prevent supply chain attacks
+  LOCAL_VC_FILE="$SCRIPT_DIR/version_control.json"
+  # Читаем локальный JSON, отбираем массив .[].VERSION, сортируем, берём последний
+  if [ -f "$LOCAL_VC_FILE" ] && local_data=$(cat "$LOCAL_VC_FILE"); then
+    LOCAL_LATEST_VERSION=$(echo "$local_data" | jq -r '.[].VERSION' | sort -V | tail -n1)
+  else
+    LOCAL_LATEST_VERSION=""
+  fi
+
+  # === Выводим текущую версию из локального файла ===
+  echo -e "\n${CYAN}$(t "current_script_version") ${INSTALLED_VERSION}${NC}"
+  if [ -n "$LOCAL_LATEST_VERSION" ]; then
+    if [ "$LOCAL_LATEST_VERSION" != "$INSTALLED_VERSION" ]; then
+      echo -e "${YELLOW}$(t "new_version_available") ${LOCAL_LATEST_VERSION}. $(t "new_version_update")${NC}"
+      echo -e "${BLUE}$(t "note_check_updates_safely")${NC}"
+    else
+      echo -e "${GREEN}$(t "local_version_up_to_date")${NC}"
+    fi
+  fi
+}

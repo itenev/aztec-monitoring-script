@@ -17,6 +17,7 @@ read_and_validate_url() {
       echo -e "${RED}Invalid URL format. Please enter a valid URL.${NC}"
     fi
   done
+}
 init_languages() {
   echo -e "\n${BLUE}Select language / Выберите язык:${NC}"
   echo -e "1. English"

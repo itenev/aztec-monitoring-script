@@ -18,3 +18,23 @@ find_peer_id() {
       cut -d'"' -f4 | \
       head -n 1 > "$out"
   }
+
+  local peer_id_tmp
+  peer_id_tmp=$(mktemp)
+
+  _find_peer_id_worker "$peer_id_tmp" &
+  worker_pid=$!
+  spinner $worker_pid
+  wait $worker_pid
+
+  peer_id=$(< "$peer_id_tmp")
+  rm -f "$peer_id_tmp"
+
+  if [ -z "$peer_id" ]; then
+    echo -e "${RED}$(t "peer_not_found")${NC}"
+    return 1
+  else
+    echo -e "\n${GREEN}$(t "peer_found")${NC}: $peer_id"
+    return 0
+  fi
+}

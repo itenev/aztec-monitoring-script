@@ -77,27 +77,4 @@ get_network_settings() {
 
     echo "$network|$rpc_url|$contract_address"
 }
-# === Helper function to get network and RPC settings ===
-get_network_settings() {
-    local env_file="\$HOME/.env-aztec-agent"
-    local network="testnet"
-    local rpc_url=""
 
-    if [[ -f "\$env_file" ]]; then
-        source "\$env_file"
-        [[ -n "\$NETWORK" ]] && network="\$NETWORK"
-        if [[ -n "\$ALT_RPC" ]]; then
-            rpc_url="\$ALT_RPC"
-        elif [[ -n "\$RPC_URL" ]]; then
-            rpc_url="\$RPC_URL"
-        fi
-    fi
-
-    # Determine contract address based on network
-    local contract_address="\$CONTRACT_ADDRESS"
-    if [[ "\$network" == "mainnet" ]]; then
-        contract_address="\$CONTRACT_ADDRESS_MAINNET"
-    fi
-
-    echo "\$network|\$rpc_url|\$contract_address"
-}
