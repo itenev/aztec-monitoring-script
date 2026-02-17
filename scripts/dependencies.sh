@@ -69,34 +69,63 @@ check_dependencies() {
       for tool in "${missing[@]}"; do
         case "$tool" in
           cast)
-            echo -e "\n${CYAN}Foundry is not installed. Please install it manually.${NC}"
-            echo -e "For more information, visit https://book.getfoundry.sh/getting-started/installation"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_foundry")${NC}"
+            # Security warning: This is a third-party script execution. Consider pinning to a specific version
+            # or verifying checksums in production environments to prevent supply chain attacks.
+            curl -L https://foundry.paradigm.xyz | bash
+
+            if ! grep -q 'foundry/bin'  ~/.bash_profile; then
+              echo 'export PATH="$PATH:$HOME/.foundry/bin"' >> ~/.bash_profile
+            fi
+
+            export PATH="$PATH:$HOME/.foundry/bin"
+            foundryup
             ;;
 
           curl)
-            echo -e "\n${CYAN}curl is not installed. Please install it manually.${NC}"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_curl")${NC}"
+            sudo apt-get install -y curl || brew install curl
             ;;
 
           grep|sed)
-            echo -e "\n${CYAN}grep or sed is not installed. Please install it manually.${NC}"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_utils")${NC}"
+            sudo apt-get install -y grep sed || brew install grep gnu-sed
             ;;
 
           jq)
-            echo -e "\n${CYAN}jq is not installed. Please install it manually.${NC}"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_jq")${NC}"
+            sudo apt-get install -y jq || brew install jq
             ;;
 
           bc)
-            echo -e "\n${CYAN}bc is not installed. Please install it manually.${NC}"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_bc")${NC}"
+            sudo apt-get install -y bc || brew install bc
             ;;
 
           python3)
-            echo -e "\n${CYAN}python3 is not installed. Please install it manually.${NC}"
-            exit 1
+            echo -e "\n${CYAN}$(t "installing_python3")${NC}"
+            # Устанавливаем python3 и pip отдельно
+            if command -v apt-get &>/dev/null; then
+              sudo apt-get install -y python3 python3-pip
+            elif command -v brew &>/dev/null; then
+              brew install python3
+            fi
+
+            # Устанавливаем curl_cffi с обходом externally-managed-environment
+            echo -e "\n${CYAN}$(t "installing_curl_cffi")${NC}"
+            # Сначала проверяем доступность pip
+            if python3 -m pip --version &>/dev/null; then
+              python3 -m pip install --break-system-packages --quiet curl_cffi 2>/dev/null || \
+              python3 -m pip install --quiet curl_cffi
+            else
+              # Если pip недоступен, устанавливаем через ensurepip
+              python3 -m ensurepip --user 2>/dev/null || true
+              python3 -m pip install --user --quiet curl_cffi 2>/dev/null || \
+              curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+              python3 get-pip.py --user && \
+              python3 -m pip install --user --quiet curl_cffi
+              rm -f get-pip.py
+            fi
             ;;
 
           python3_curl_cffi)
