@@ -107,7 +107,8 @@ check_aztec_container_logs() {
     echo -e "\n${GREEN}$(t "container_found") $container_id${NC}"
 
     echo -e "\n${BLUE}$(t "get_block")${NC}"
-    block_hex=$(cast call "$contract_address" "$FUNCTION_SIG" --rpc-url "$rpc_url" 2>/dev/null)
+    block_hex=$(cast call "$contract_address" "getPendingBlockNumber()" --rpc-url "$rpc_url" 2>/dev/null)
+    [ -z "$block_hex" ] && block_hex=$(cast call "$contract_address" "getPendingCheckpointNumber()" --rpc-url "$rpc_url" 2>/dev/null)
     if [ -z "$block_hex" ]; then
         echo -e "\n${RED}$(t "block_error")${NC}"
         return

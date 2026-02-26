@@ -141,7 +141,6 @@ export FOUNDRY_DISABLE_NIGHTLY_WARNING=1
 source \$HOME/.env-aztec-agent
 CONTRACT_ADDRESS="$CONTRACT_ADDRESS"
 CONTRACT_ADDRESS_MAINNET="$CONTRACT_ADDRESS_MAINNET"
-FUNCTION_SIG="$FUNCTION_SIG"
 TELEGRAM_BOT_TOKEN="$TELEGRAM_BOT_TOKEN"
 TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID"
 LOG_FILE="$LOG_FILE"
@@ -740,13 +739,11 @@ check_blocks() {
   check_critical_errors "\$container_id"
 
   # Получаем текущий блок из контракта
+  # Получаем текущий блок из контракта (совместимость: getPendingBlockNumber для mainnet, getPendingCheckpointNumber для старых контрактов)
   debug_log "Getting block from contract: \$CONTRACT_ADDRESS"
   debug_log "Using RPC: \$RPC_URL"
-  debug_log "Using RPC: \$FUNCTION_SIG"
-  debug_log "Command: \$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1)"
-  # Выполняем cast call и фильтруем предупреждения, оставляя только hex-значение
-  # Фильтруем строки, начинающиеся с "Warning:", и извлекаем hex-значение (0x...)
-  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingBlockNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]] && block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingCheckpointNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
   if [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]]; then
     log "Block Fetch Error. Check RPC or cast: \$block_hex"
     current_time=\$(date '+%Y-%m-%d %H:%M:%S')

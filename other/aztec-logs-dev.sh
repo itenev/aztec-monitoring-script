@@ -66,7 +66,27 @@ init_languages() {
   TRANSLATIONS["en,option22"]="22. Change RPC URL"
   TRANSLATIONS["en,option23"]="23. Check for script updates (safe, with hash verification)"
   TRANSLATIONS["en,option24"]="24. Check for error definitions updates (safe, with hash verification)"
+  TRANSLATIONS["en,option25"]="25. Flush bot (Flush Rewarder — incentivized validator queue flush)"
   TRANSLATIONS["en,option0"]="0. Exit"
+
+  TRANSLATIONS["en,flush_bot_title"]="Flush Rewarder Bot"
+  TRANSLATIONS["en,flush_bot_info"]="Calls flushEntryQueue() on L1 to move pending validators into the active set. Reward: 100 AZTEC per insertion. Epoch ~38 min."
+  TRANSLATIONS["en,flush_mainnet_only"]="Flush Rewarder runs on Ethereum mainnet. Current network is testnet. Enter mainnet RPC URL (or press Enter to cancel):"
+  TRANSLATIONS["en,flush_rpc_prompt"]="Enter Ethereum mainnet RPC URL (or press Enter to use current RPC):"
+  TRANSLATIONS["en,flush_keystore_ok"]="Using keystore sender (first address). Ensure this address has ETH for gas."
+  TRANSLATIONS["en,flush_enter_pk"]="Enter private key for flush transactions (with 0x, hidden). Wallet must have ETH for gas:"
+  TRANSLATIONS["en,flush_rewards_available"]="Rewards available in pool (AZTEC):"
+  TRANSLATIONS["en,flush_rewards_of"]="Your unclaimed rewards (AZTEC):"
+  TRANSLATIONS["en,flush_calling"]="Calling flushEntryQueue()..."
+  TRANSLATIONS["en,flush_success"]="Flush tx sent successfully"
+  TRANSLATIONS["en,flush_failed"]="Flush transaction failed"
+  TRANSLATIONS["en,flush_zero_insertions"]="Tx succeeded but 0 validators inserted (rate limit or empty queue). Next epoch in ~38 min."
+  TRANSLATIONS["en,flush_loop_wait"]="Waiting for next epoch (~38 min). Press Ctrl+C to stop the bot."
+  TRANSLATIONS["en,flush_ctrlc"]="Press Ctrl+C to exit and return to the menu"
+  TRANSLATIONS["en,flush_claim_hint"]="Use claimRewards() on the Flush Rewarder contract to claim earned AZTEC."
+  TRANSLATIONS["en,flush_keystore_not_found"]="Keystore not found. Enter private key for flush wallet (with 0x):"
+  TRANSLATIONS["en,flush_run_once"]="Run once (1) or loop every epoch (2)? [1/2]"
+  TRANSLATIONS["en,flush_invalid_choice"]="Invalid choice. Enter 1 or 2."
 
   # Update check translations
   TRANSLATIONS["en,note_check_updates_safely"]="Note: To check for remote updates safely, use the Option 23"
@@ -153,10 +173,10 @@ init_languages() {
   TRANSLATIONS["en,private_key"]="Private Key"
   TRANSLATIONS["en,bls_key"]="BLS Key"
   TRANSLATIONS["en,bls_method_existing"]="Generate using existing addresses (from mnemonic, only if all validator addresses are from the same seed phrase)"
-  TRANSLATIONS["en,bls_method_new_operator"]="Generate new operator address (recommended)"
+  TRANSLATIONS["en,bls_method_new_operator"]="Generate new operator address"
   TRANSLATIONS["en,bls_method_prompt"]="Choose method (1-4): "
   TRANSLATIONS["en,bls_invalid_method"]="Invalid method selected"
-  TRANSLATIONS["en,bls_method_dashboard"]="Generate dashboard keystores (private + staker_output for staking dashboard)"
+  TRANSLATIONS["en,bls_method_dashboard"]="Generate dashboard keystores (private + staker_output for staking dashboard) - recommended"
   TRANSLATIONS["en,bls_dashboard_title"]="Dashboard keystores (docs.aztec.network)"
   TRANSLATIONS["en,bls_dashboard_new_or_mnemonic"]="Generate new mnemonic (1) or enter existing mnemonic (2)? [1/2]: "
   TRANSLATIONS["en,bls_dashboard_count_prompt"]="Number of validator identities (e.g. 1 or 5): "
@@ -712,7 +732,27 @@ init_languages() {
   TRANSLATIONS["ru,option22"]="22. Изменить RPC URL"
   TRANSLATIONS["ru,option23"]="23. Проверить обновления скрипта (безопасно, с проверкой хеша)"
   TRANSLATIONS["ru,option24"]="24. Проверить обновления определений ошибок (безопасно, с проверкой хеша)"
+  TRANSLATIONS["ru,option25"]="25. Flush бот (Flush Rewarder — смыв очереди валидаторов за награду)"
   TRANSLATIONS["ru,option0"]="0. Выход"
+
+  TRANSLATIONS["ru,flush_bot_title"]="Flush Rewarder бот"
+  TRANSLATIONS["ru,flush_bot_info"]="Вызов flushEntryQueue() в L1 для перевода валидаторов из очереди в активный набор. Награда: 100 AZTEC за вставку. Эпоха ~38 мин."
+  TRANSLATIONS["ru,flush_mainnet_only"]="Flush Rewarder работает в Ethereum mainnet. Сейчас выбран testnet. Введите mainnet RPC URL (или Enter для отмены):"
+  TRANSLATIONS["ru,flush_rpc_prompt"]="Введите Ethereum mainnet RPC URL (или Enter — использовать текущий RPC):"
+  TRANSLATIONS["ru,flush_keystore_ok"]="Используется адрес из keystore (первый). Убедитесь, что на нём есть ETH на газ."
+  TRANSLATIONS["ru,flush_enter_pk"]="Введите приватный ключ для flush-транзакций (с 0x, ввод скрыт). На кошельке должен быть ETH на газ:"
+  TRANSLATIONS["ru,flush_rewards_available"]="Доступно наград в пуле (AZTEC):"
+  TRANSLATIONS["ru,flush_rewards_of"]="Ваши неполученные награды (AZTEC):"
+  TRANSLATIONS["ru,flush_calling"]="Вызов flushEntryQueue()..."
+  TRANSLATIONS["ru,flush_success"]="Транзакция flush отправлена успешно"
+  TRANSLATIONS["ru,flush_failed"]="Транзакция flush не удалась"
+  TRANSLATIONS["ru,flush_zero_insertions"]="Транзакция успешна, но вставлено 0 валидаторов (лимит или пустая очередь). Следующая эпоха через ~38 мин."
+  TRANSLATIONS["ru,flush_loop_wait"]="Ожидание следующей эпохи (~38 мин). Ctrl+C — остановить бота."
+  TRANSLATIONS["ru,flush_ctrlc"]="Нажмите Ctrl+C для выхода в меню"
+  TRANSLATIONS["ru,flush_claim_hint"]="Вызовите claimRewards() в контракте Flush Rewarder, чтобы забрать заработанные AZTEC."
+  TRANSLATIONS["ru,flush_keystore_not_found"]="Keystore не найден. Введите приватный ключ кошелька для flush (с 0x):"
+  TRANSLATIONS["ru,flush_run_once"]="Запустить один раз (1) или в цикле каждую эпоху (2)? [1/2]"
+  TRANSLATIONS["ru,flush_invalid_choice"]="Неверный выбор. Введите 1 или 2."
 
   # Переводы для проверки обновлений
   TRANSLATIONS["ru,note_check_updates_safely"]="Примечание: Для безопасной проверки удалённых обновлений используйте Опцию 23"
@@ -801,10 +841,10 @@ init_languages() {
   TRANSLATIONS["ru,private_key"]="Приватный ключ"
   TRANSLATIONS["ru,bls_key"]="BLS ключ"
   TRANSLATIONS["ru,bls_method_existing"]="Сгенерировать используя существующие адреса (из mnemonic, только если все адреса валидаторов из одной сид фразы)"
-  TRANSLATIONS["ru,bls_method_new_operator"]="Сгенерировать новый адрес оператора (рекомендуется)"
+  TRANSLATIONS["ru,bls_method_new_operator"]="Сгенерировать новый адрес оператора"
   TRANSLATIONS["ru,bls_method_prompt"]="Выберите метод (1-4): "
   TRANSLATIONS["ru,bls_invalid_method"]="Выбран неверный метод"
-  TRANSLATIONS["ru,bls_method_dashboard"]="Сгенерировать keystore для дашборда (приватный + staker_output для staking dashboard)"
+  TRANSLATIONS["ru,bls_method_dashboard"]="Сгенерировать keystore для дашборда (приватный + staker_output для staking dashboard) - рекомендуется"
   TRANSLATIONS["ru,bls_dashboard_title"]="Keystore для дашборда (docs.aztec.network)"
   TRANSLATIONS["ru,bls_dashboard_new_or_mnemonic"]="Сгенерировать новую мнемонику (1) или ввести существующую (2)? [1/2]: "
   TRANSLATIONS["ru,bls_dashboard_count_prompt"]="Количество идентичностей валидаторов (например 1 или 5): "
@@ -1364,7 +1404,27 @@ init_languages() {
   TRANSLATIONS["tr,option22"]="22. RPC URL'sini değiştir"
   TRANSLATIONS["tr,option23"]="23. Script güncellemelerini kontrol et (güvenli, hash doğrulama ile)"
   TRANSLATIONS["tr,option24"]="24. Hata tanımları güncellemelerini kontrol et (güvenli, hash doğrulama ile)"
+  TRANSLATIONS["tr,option25"]="25. Flush bot (Flush Rewarder — doğrulayıcı kuyruğu flush, ödüllü)"
   TRANSLATIONS["tr,option0"]="0. Çıkış"
+
+  TRANSLATIONS["tr,flush_bot_title"]="Flush Rewarder Bot"
+  TRANSLATIONS["tr,flush_bot_info"]="Bekleyen doğrulayıcıları aktif sete taşımak için L1'de flushEntryQueue() çağrısı. Ödül: ekleme başına 100 AZTEC. Epoch ~38 dk."
+  TRANSLATIONS["tr,flush_mainnet_only"]="Flush Rewarder Ethereum mainnet'te çalışır. Mevcut ağ testnet. Mainnet RPC URL girin (veya iptal için Enter):"
+  TRANSLATIONS["tr,flush_rpc_prompt"]="Ethereum mainnet RPC URL girin (veya mevcut RPC için Enter):"
+  TRANSLATIONS["tr,flush_keystore_ok"]="Keystore gönderici kullanılıyor (ilk adres). Bu adreste gaz için ETH olduğundan emin olun."
+  TRANSLATIONS["tr,flush_enter_pk"]="Flush işlemleri için özel anahtar girin (0x ile, gizli). Cüzdanda gaz için ETH olmalı:"
+  TRANSLATIONS["tr,flush_rewards_available"]="Havuzda mevcut ödüller (AZTEC):"
+  TRANSLATIONS["tr,flush_rewards_of"]="Talep edilmemiş ödülleriniz (AZTEC):"
+  TRANSLATIONS["tr,flush_calling"]="flushEntryQueue() çağrılıyor..."
+  TRANSLATIONS["tr,flush_success"]="Flush işlemi başarıyla gönderildi"
+  TRANSLATIONS["tr,flush_failed"]="Flush işlemi başarısız"
+  TRANSLATIONS["tr,flush_zero_insertions"]="İşlem başarılı ancak 0 doğrulayıcı eklendi (limit veya boş kuyruk). Sonraki epoch ~38 dk."
+  TRANSLATIONS["tr,flush_loop_wait"]="Sonraki epoch bekleniyor (~38 dk). Botu durdurmak için Ctrl+C."
+  TRANSLATIONS["tr,flush_ctrlc"]="Menüye dönmek için Ctrl+C'ye basın"
+  TRANSLATIONS["tr,flush_claim_hint"]="Kazanılan AZTEC'i almak için Flush Rewarder sözleşmesinde claimRewards() çağırın."
+  TRANSLATIONS["tr,flush_keystore_not_found"]="Keystore bulunamadı. Flush cüzdanı için özel anahtar girin (0x ile):"
+  TRANSLATIONS["tr,flush_run_once"]="Bir kez çalıştır (1) veya her epoch döngü (2)? [1/2]"
+  TRANSLATIONS["tr,flush_invalid_choice"]="Geçersiz seçim. 1 veya 2 girin."
 
   # Güncelleme kontrolü çevirileri
   TRANSLATIONS["tr,note_check_updates_safely"]="Not: Uzaktan güncellemeleri güvenli bir şekilde kontrol etmek için Seçenek 23'ü kullanın"
@@ -1453,10 +1513,10 @@ init_languages() {
   TRANSLATIONS["tr,private_key"]="Özel Anahtar"
   TRANSLATIONS["tr,bls_key"]="BLS Anahtarı"
   TRANSLATIONS["tr,bls_method_existing"]="Mevcut adresleri kullanarak üret (yalnızca tüm doğrulayıcı adresleri aynı başlangıç ​​ifadesinden geliyorsa, anımsatıcıdan)"
-  TRANSLATIONS["tr,bls_method_new_operator"]="Yeni operatör adresi oluştur (tavsiye edilen)"
+  TRANSLATIONS["tr,bls_method_new_operator"]="Yeni operatör adresi oluştur"
   TRANSLATIONS["tr,bls_method_prompt"]="Yöntem seçin (1-4): "
   TRANSLATIONS["tr,bls_invalid_method"]="Geçersiz yöntem seçildi"
-  TRANSLATIONS["tr,bls_method_dashboard"]="Dashboard keystore'ları oluştur (özel + staking dashboard için staker_output)"
+  TRANSLATIONS["tr,bls_method_dashboard"]="Dashboard keystore'ları oluştur (özel + staking dashboard için staker_output) - tavsiye edilen"
   TRANSLATIONS["tr,bls_dashboard_title"]="Dashboard keystore'ları (docs.aztec.network)"
   TRANSLATIONS["tr,bls_dashboard_new_or_mnemonic"]="Yeni anımsatıcı oluştur (1) veya mevcut anımsatıcıyı gir (2)? [1/2]: "
   TRANSLATIONS["tr,bls_dashboard_count_prompt"]="Doğrulayıcı kimlik sayısı (örn. 1 veya 5): "
@@ -1991,7 +2051,7 @@ init_languages() {
   TRANSLATIONS["tr,claim_function_not_activated"]="Şu anda kontratta talep işlevi etkinleştirilmemiş"
 }
 
-SCRIPT_VERSION="2.7.5"
+SCRIPT_VERSION="2.8.0"
 ERROR_DEFINITIONS_VERSION="1.0.0"
 
 # Determine script directory for local file access (security: avoid remote code execution)
@@ -2852,7 +2912,8 @@ check_aztec_container_logs() {
     echo -e "\n${GREEN}$(t "container_found") $container_id${NC}"
 
     echo -e "\n${BLUE}$(t "get_block")${NC}"
-    block_hex=$(cast call "$contract_address" "$FUNCTION_SIG" --rpc-url "$rpc_url" 2>/dev/null)
+    block_hex=$(cast call "$contract_address" "getPendingBlockNumber()" --rpc-url "$rpc_url" 2>/dev/null)
+    [ -z "$block_hex" ] && block_hex=$(cast call "$contract_address" "getPendingCheckpointNumber()" --rpc-url "$rpc_url" 2>/dev/null)
     if [ -z "$block_hex" ]; then
         echo -e "\n${RED}$(t "block_error")${NC}"
         return
@@ -3824,14 +3885,11 @@ check_blocks() {
   # Проверка критических ошибок
   check_critical_errors "\$container_id"
 
-  # Получаем текущий блок из контракта
+  # Получаем текущий блок из контракта (совместимость: getPendingBlockNumber для mainnet, getPendingCheckpointNumber для старых контрактов)
   debug_log "Getting block from contract: \$CONTRACT_ADDRESS"
   debug_log "Using RPC: \$RPC_URL"
-  debug_log "Using RPC: \$FUNCTION_SIG"
-  debug_log "Command: \$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1)"
-  # Выполняем cast call и фильтруем предупреждения, оставляя только hex-значение
-  # Фильтруем строки, начинающиеся с "Warning:", и извлекаем hex-значение (0x...)
-  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingBlockNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]] && block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingCheckpointNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
   if [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]]; then
     log "Block Fetch Error. Check RPC or cast: \$block_hex"
     current_time=\$(date '+%Y-%m-%d %H:%M:%S')
@@ -6144,7 +6202,7 @@ install_aztec_node_main() {
 
     if ! command -v docker &>/dev/null; then
         echo -e "\n${RED}$(t "docker_not_found")${NC}"
-        read -p "\n$(t "install_docker_prompt")" -n 1 -r
+        read -p "$(t "install_docker_prompt")" -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             install_docker
@@ -6156,7 +6214,7 @@ install_aztec_node_main() {
 
     if ! docker compose version &>/dev/null; then
         echo -e "\n${RED}$(t "docker_compose_not_found")${NC}"
-        read -p "\n$(t "install_compose_prompt")" -n 1 -r
+        read -p "$(t "install_compose_prompt")" -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             install_docker_compose
@@ -8598,6 +8656,141 @@ claim_rewards() {
     return 0
 }
 
+# === Flush Rewarder Bot (L1 validator queue flush) ===
+# See: https://forum.aztec.network/t/introducing-the-flush-rewarder-incentivizing-validator-set-maintenance/8287
+FLUSH_REWARDER_ADDRESS="0x7C9a7130379F1B5dd6e7A53AF84fC0fE32267B65"
+FLUSH_EPOCH_SECONDS=2304
+
+run_flush_bot() {
+    echo -e "\n${BLUE}=== $(t "flush_bot_title") ===${NC}"
+    echo -e "${CYAN}$(t "flush_bot_info")${NC}"
+    echo ""
+
+    local settings
+    settings=$(get_network_settings)
+    local network=$(echo "$settings" | cut -d'|' -f1)
+    local rpc_url=$(echo "$settings" | cut -d'|' -f2)
+
+    # Flush Rewarder is on Ethereum mainnet only
+    if [[ "$network" != "mainnet" ]]; then
+        echo -e "${YELLOW}$(t "flush_mainnet_only")${NC}"
+        read -r mainnet_rpc
+        if [[ -z "$mainnet_rpc" ]]; then
+            echo -e "${YELLOW}Cancelled.${NC}"
+            return 0
+        fi
+        rpc_url="$mainnet_rpc"
+    fi
+
+    if [[ -z "$rpc_url" ]]; then
+        echo -e "${RED}$(t "rpc_url_not_set")${NC}"
+        return 1
+    fi
+
+    local KEYSTORE_FILE="$HOME/aztec/config/keystore.json"
+    local sender_address=""
+    local use_keystore=false
+    local private_key=""
+
+    if [[ -f "$KEYSTORE_FILE" ]]; then
+        sender_address=$(jq -r '.validators[0].attester.eth // .validators[0].coinbase // empty' "$KEYSTORE_FILE" 2>/dev/null | head -1)
+        if [[ -n "$sender_address" && "$sender_address" != "null" && "$sender_address" =~ ^0x[a-fA-F0-9]{40}$ ]]; then
+            echo -e "${GREEN}$(t "flush_keystore_ok")${NC}"
+            echo -e "${CYAN}  Sender: $sender_address${NC}"
+            use_keystore=true
+        fi
+    fi
+
+    if [[ "$use_keystore" != true ]]; then
+        echo -e "${CYAN}$(t "flush_keystore_not_found")${NC}"
+        read -s -p "> " private_key
+        echo
+        if [[ -z "$private_key" ]]; then
+            echo -e "${RED}Private key required.${NC}"
+            return 1
+        fi
+        sender_address=$(cast wallet address "$private_key" 2>/dev/null)
+        if [[ -z "$sender_address" ]]; then
+            echo -e "${RED}Invalid private key.${NC}"
+            return 1
+        fi
+        echo -e "${CYAN}  Sender: $sender_address${NC}"
+    fi
+
+    # Check rewards available in pool
+    local rewards_avail_hex
+    rewards_avail_hex=$(cast call "$FLUSH_REWARDER_ADDRESS" "rewardsAvailable()" --rpc-url "$rpc_url" 2>/dev/null)
+    if [[ $? -eq 0 && -n "$rewards_avail_hex" ]]; then
+        local rewards_avail_dec
+        rewards_avail_dec=$(cast --to-dec "$rewards_avail_hex" 2>/dev/null)
+        local rewards_avail_eth
+        rewards_avail_eth=$(echo "scale=2; $rewards_avail_dec / 1000000000000000000" | bc 2>/dev/null || echo "?")
+        echo -e "${CYAN}$(t "flush_rewards_available") $rewards_avail_eth${NC}"
+    fi
+
+    local rewards_of_hex
+    rewards_of_hex=$(cast call "$FLUSH_REWARDER_ADDRESS" "rewardsOf(address)" "$sender_address" --rpc-url "$rpc_url" 2>/dev/null)
+    if [[ $? -eq 0 && -n "$rewards_of_hex" ]]; then
+        local rewards_of_dec
+        rewards_of_dec=$(cast --to-dec "$rewards_of_hex" 2>/dev/null)
+        local rewards_of_eth
+        rewards_of_eth=$(echo "scale=2; $rewards_of_dec / 1000000000000000000" | bc 2>/dev/null || echo "?")
+        echo -e "${CYAN}$(t "flush_rewards_of") $rewards_of_eth${NC}"
+    fi
+
+    echo ""
+    read -p "$(t "flush_run_once") " run_mode
+    run_mode=${run_mode:-1}
+    if [[ "$run_mode" != "1" && "$run_mode" != "2" ]]; then
+        echo -e "${RED}$(t "flush_invalid_choice")${NC}"
+        return 1
+    fi
+
+    echo -e "${YELLOW}$(t "flush_ctrlc")${NC}"
+    echo ""
+
+    flush_one() {
+        echo -e "${BLUE}$(t "flush_calling")${NC}"
+        local tx_hash=""
+        if [[ "$use_keystore" = true ]]; then
+            tx_hash=$(cast send "$FLUSH_REWARDER_ADDRESS" "flushEntryQueue()" \
+                --rpc-url "$rpc_url" \
+                --keystore "$KEYSTORE_FILE" \
+                --from "$sender_address" 2>&1)
+        else
+            tx_hash=$(cast send "$FLUSH_REWARDER_ADDRESS" "flushEntryQueue()" \
+                --rpc-url "$rpc_url" \
+                --private-key "$private_key" 2>&1)
+        fi
+
+        if [[ $? -eq 0 && -n "$tx_hash" && "$tx_hash" =~ 0x[a-fA-F0-9]{64} ]]; then
+            echo -e "${GREEN}✅ $(t "flush_success")${NC} $tx_hash"
+            return 0
+        else
+            if echo "$tx_hash" | grep -qi "revert\|failed"; then
+                echo -e "${YELLOW}$(t "flush_zero_insertions")${NC}"
+            else
+                echo -e "${RED}$(t "flush_failed")${NC}"
+                echo "$tx_hash" | head -5
+            fi
+            return 1
+        fi
+    }
+
+    if [[ "$run_mode" = "1" ]]; then
+        flush_one
+        echo -e "\n${CYAN}$(t "flush_claim_hint")${NC}"
+        return 0
+    fi
+
+    # Loop: run every epoch
+    while true; do
+        flush_one
+        echo -e "\n${BLUE}$(t "flush_loop_wait")${NC}"
+        sleep "$FLUSH_EPOCH_SECONDS"
+    done
+}
+
 # === Main menu ===
 main_menu() {
   show_logo
@@ -8627,6 +8820,7 @@ main_menu() {
     echo -e "${CYAN}$(t "option22")${NC}"
     echo -e "${CYAN}$(t "option23")${NC}"
     echo -e "${CYAN}$(t "option24")${NC}"
+    echo -e "${GREEN}$(t "option25")${NC}"
     echo -e "${RED}$(t "option0")${NC}"
     echo -e "${BLUE}================================${NC}"
 
@@ -8660,6 +8854,7 @@ main_menu() {
       22) change_rpc_url; command_executed=true ;;
       23) check_updates_safely; command_executed=true ;;
       24) check_error_definitions_updates_safely; command_executed=true ;;
+      25) run_flush_bot; command_executed=true ;;
       0) echo -e "\n${GREEN}$(t "goodbye")${NC}"; exit 0 ;;
       *) echo -e "\n${RED}$(t "invalid_choice")${NC}" ;;
     esac

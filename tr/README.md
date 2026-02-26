@@ -35,10 +35,11 @@ Ayrıca, spoiler altındaki Sürüm Geçmişine de göz atın, betiğin işlevle
 | 🌐 **Diller** | Dil desteği İngilizce/Rusça/Türkçe                  |
 | ⚙️ **RPC**       | Esnek RPC uç noktası yapılandırması               |
 
-## 📌 Son Güncellemeler 06-02-2026
+## 📌 Son Güncellemeler 26-02-2026
 
-- BLS menüsüne (seçenek 18-4) yeni alt seçenek eklendi: dashboard keystore oluşturma — `$HOME/aztec/` içinde `dashboard_` önekli dosyalar (özel keystore ve staking dashboard için staker_output), yeni anımsatıcı veya mevcut seed phrase desteği.
-- Küçük iyileştirmeler.
+⚠️ Komut dosyasını güncelledikten sonra, eski izleme aracısını silin (seçenek 3) ve yeni bir aracı oluşturun (seçenek 2).
+
+- Rollup sözleşmesi ile uyumluluk: blok almak için fallback kullanılıyor — önce `getPendingBlockNumber()` (güncel mainnet), başarısız olursa `getPendingCheckpointNumber()` (yeni sözleşme / testnet).
 
 **error_definitions.json**
 
@@ -46,10 +47,15 @@ SHA256: `39e9dff9e976f5db9417aa11cd35117644e689668c01e438c5206f8d664ddcc1`
 
 **version_control.json**
 
-SHA256: `d1187f860df8e79045c3bf013db218129ebc5674022b681d1f3a0d0e2e59b218`
+SHA256: `c81ceb7c07347435c88757a74c22b78eaa9e37a61d69199effbbac59d58f7921`
 
 <details>
 <summary>📅 Sürüm Geçmişi</summary>
+
+### 06-02-2026
+
+- BLS menüsüne (seçenek 18-4) yeni alt seçenek eklendi: dashboard keystore oluşturma — `$HOME/aztec/` içinde `dashboard_` önekli dosyalar (özel keystore ve staking dashboard için staker_output), yeni anımsatıcı veya mevcut seed phrase desteği.
+- Küçük iyileştirmeler.
 
 ### 05-02-2026
 

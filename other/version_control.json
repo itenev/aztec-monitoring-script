@@ -286,5 +286,12 @@
       "New option in BLS menu (option 18-4): generate dashboard keystores — private keystore and staker_output for staking dashboard, files saved with dashboard_ prefix in $HOME/aztec/, supports new mnemonic or existing seed phrase",
       "Minor improvements"
     ]
+  },
+  {
+    "VERSION": "2.8.1",
+    "UPDATE_DATE": "26.02.2026",
+    "CHANGES": [
+      "Compatibility: getPendingBlockNumber() / getPendingCheckpointNumber() fallback for rollup contract block fetch (mainnet upgrade)"
+    ]
   }
 ]
