@@ -39,7 +39,7 @@
 
 ⚠️ После обновления скрипта удалите старый агент мониторинга (опция 3) и создайте нового агента (опция 2).
 
-- Совместимость двух сигнатур контракта: при получении блока из rollup используется fallback — сначала `getPendingBlockNumber()` (mainnet после апгрейда), при неудаче `getPendingCheckpointNumber()` (старые контракты / testnet).
+- Совместимость двух сигнатур контракта: при получении блока из rollup используется fallback — сначала `getPendingBlockNumber()` (текущий mainnet), при неудаче `getPendingCheckpointNumber()` (новый контракт / testnet).
 
 **error_definitions.json**
 

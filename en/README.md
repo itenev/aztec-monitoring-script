@@ -39,7 +39,7 @@ Also check out the Version History under the spoiler, there is a lot of useful i
 
 ⚠️ After updating the script, delete the old monitoring agent (option 3) and create a new agent (option 2).
 
-- Contract call compatibility: rollup block fetch now uses fallback — first `getPendingBlockNumber()` (mainnet after upgrade), then `getPendingCheckpointNumber()` on failure (legacy contracts / testnet).
+- Contract call compatibility: rollup block fetch now uses fallback — first `getPendingBlockNumber()` (current mainnet), then `getPendingCheckpointNumber()` on failure (new contract / testnet).
 
 **error_definitions.json**
 
