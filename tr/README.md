@@ -37,6 +37,8 @@ Ayrıca, spoiler altındaki Sürüm Geçmişine de göz atın, betiğin işlevle
 
 ## 📌 Son Güncellemeler 26-02-2026
 
+⚠️ Komut dosyasını güncelledikten sonra, eski izleme aracısını silin (seçenek 3) ve yeni bir aracı oluşturun (seçenek 2).
+
 - Rollup sözleşmesi ile uyumluluk: blok almak için fallback kullanılıyor — önce `getPendingBlockNumber()` (mainnet güncellemesi sonrası), başarısız olursa `getPendingCheckpointNumber()` (eski sözleşmeler / testnet).
 
 **error_definitions.json**
