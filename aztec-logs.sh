@@ -1991,7 +1991,7 @@ init_languages() {
   TRANSLATIONS["tr,claim_function_not_activated"]="Şu anda kontratta talep işlevi etkinleştirilmemiş"
 }
 
-SCRIPT_VERSION="2.8.0"
+SCRIPT_VERSION="2.8.1"
 ERROR_DEFINITIONS_VERSION="1.0.0"
 
 # Determine script directory for local file access (security: avoid remote code execution)
@@ -2852,7 +2852,8 @@ check_aztec_container_logs() {
     echo -e "\n${GREEN}$(t "container_found") $container_id${NC}"
 
     echo -e "\n${BLUE}$(t "get_block")${NC}"
-    block_hex=$(cast call "$contract_address" "$FUNCTION_SIG" --rpc-url "$rpc_url" 2>/dev/null)
+    block_hex=$(cast call "$contract_address" "getPendingBlockNumber()" --rpc-url "$rpc_url" 2>/dev/null)
+    [ -z "$block_hex" ] && block_hex=$(cast call "$contract_address" "getPendingCheckpointNumber()" --rpc-url "$rpc_url" 2>/dev/null)
     if [ -z "$block_hex" ]; then
         echo -e "\n${RED}$(t "block_error")${NC}"
         return
@@ -3824,14 +3825,11 @@ check_blocks() {
   # Проверка критических ошибок
   check_critical_errors "\$container_id"
 
-  # Получаем текущий блок из контракта
+  # Получаем текущий блок из контракта (совместимость: getPendingBlockNumber для mainnet, getPendingCheckpointNumber для старых контрактов)
   debug_log "Getting block from contract: \$CONTRACT_ADDRESS"
   debug_log "Using RPC: \$RPC_URL"
-  debug_log "Using RPC: \$FUNCTION_SIG"
-  debug_log "Command: \$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1)"
-  # Выполняем cast call и фильтруем предупреждения, оставляя только hex-значение
-  # Фильтруем строки, начинающиеся с "Warning:", и извлекаем hex-значение (0x...)
-  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "\$FUNCTION_SIG" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingBlockNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
+  [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]] && block_hex=\$(cast call "\$CONTRACT_ADDRESS" "getPendingCheckpointNumber()" --rpc-url "\$RPC_URL" 2>&1 | grep -vE '^Warning:' | grep -oE '0x[0-9a-fA-F]+' | head -1)
   if [[ "\$block_hex" == *"Error"* || -z "\$block_hex" ]]; then
     log "Block Fetch Error. Check RPC or cast: \$block_hex"
     current_time=\$(date '+%Y-%m-%d %H:%M:%S')
@@ -6144,7 +6142,7 @@ install_aztec_node_main() {
 
     if ! command -v docker &>/dev/null; then
         echo -e "\n${RED}$(t "docker_not_found")${NC}"
-        read -p "\n$(t "install_docker_prompt")" -n 1 -r
+        read -p "$(t "install_docker_prompt")" -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             install_docker
@@ -6156,7 +6154,7 @@ install_aztec_node_main() {
 
     if ! docker compose version &>/dev/null; then
         echo -e "\n${RED}$(t "docker_compose_not_found")${NC}"
-        read -p "\n$(t "install_compose_prompt")" -n 1 -r
+        read -p "$(t "install_compose_prompt")" -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             install_docker_compose

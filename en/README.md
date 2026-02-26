@@ -35,10 +35,9 @@ Also check out the Version History under the spoiler, there is a lot of useful i
 | 🌐 **Languages** | Language support English/Russian/Turkish                 |
 | ⚙️ **RPC**       | Flexible RPC endpoint configuration                      |
 
-## 📌 Latest Updates 06-02-2026
+## 📌 Latest Updates 26-02-2026
 
-- New option in BLS menu (option 18-4): generate keystores for Aztec Staking dashboard  — private keystore and staker_output for staking dashboard, files saved with `dashboard_` prefix in `$HOME/aztec/`, supports new mnemonic or existing seed phrase.
-- Minor improvements.
+- Contract call compatibility: rollup block fetch now uses fallback — first `getPendingBlockNumber()` (mainnet after upgrade), then `getPendingCheckpointNumber()` on failure (legacy contracts / testnet).
 
 **error_definitions.json**
 
@@ -46,10 +45,15 @@ SHA256: `39e9dff9e976f5db9417aa11cd35117644e689668c01e438c5206f8d664ddcc1`
 
 **version_control.json**
 
-SHA256: `d1187f860df8e79045c3bf013db218129ebc5674022b681d1f3a0d0e2e59b218`
+SHA256: `c81ceb7c07347435c88757a74c22b78eaa9e37a61d69199effbbac59d58f7921`
 
 <details>
 <summary>📅 Version History</summary>
+
+### 06-02-2026
+
+- New option in BLS menu (option 18-4): generate keystores for Aztec Staking dashboard  — private keystore and staker_output for staking dashboard, files saved with `dashboard_` prefix in `$HOME/aztec/`, supports new mnemonic or existing seed phrase.
+- Minor improvements.
 
 ### 05-02-2026
 
