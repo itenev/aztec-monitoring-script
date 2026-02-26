@@ -434,13 +434,16 @@ Tek validator modu için aynı veriler ayrı ayrı sağlanır.
 2. **Başlatma veya Güncelleme**:
 
    ```bash
-   curl -o aztec-logs.sh https://raw.githubusercontent.com/pittpv/aztec-monitoring-script/main/aztec-logs.sh && chmod +x aztec-logs.sh && ./aztec-logs.sh
+   LATEST=$(curl -s https://api.github.com/repos/itenev/aztec-monitoring-script/releases/latest | grep '"tag_name"' | cut -d'"' -f4) && \
+   curl -LO https://github.com/itenev/aztec-monitoring-script/releases/download/${LATEST}/aztec-monitoring-script-${LATEST}.tar.gz && \
+   tar -xzf aztec-monitoring-script-${LATEST}.tar.gz && \
+   cd aztec-monitoring-script-${LATEST} && ./start.sh
    ```
 
    Gelecekteki çalıştırmalar için:
 
    ```bash
-   cd $HOME && ./aztec-logs.sh
+   cd $(ls -d ~/aztec-monitoring-script-v* | tail -1) && ./start.sh
    ```
 
 3. **Talimatları izleyin**:

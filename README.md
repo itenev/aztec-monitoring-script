@@ -439,12 +439,18 @@ SHA256: `c81ceb7c07347435c88757a74c22b78eaa9e37a61d69199effbbac59d58f7921`
    Скрипт проверит наличиие необходимых компонентов и предложит установить недостающие. 
 
 2. **Запуск или Обновление**:
+
    ```bash
-   curl -o aztec-logs.sh https://raw.githubusercontent.com/pittpv/aztec-monitoring-script/main/aztec-logs.sh && chmod +x aztec-logs.sh && ./aztec-logs.sh
+   LATEST=$(curl -s https://api.github.com/repos/itenev/aztec-monitoring-script/releases/latest | grep '"tag_name"' | cut -d'"' -f4) && \
+   curl -LO https://github.com/itenev/aztec-monitoring-script/releases/download/${LATEST}/aztec-monitoring-script-${LATEST}.tar.gz && \
+   tar -xzf aztec-monitoring-script-${LATEST}.tar.gz && \
+   cd aztec-monitoring-script-${LATEST} && ./start.sh
    ```
+
    Для последующих запусков используйте команду:
+
    ```bash
-   cd $HOME && ./aztec-logs.sh 
+   cd $(ls -d ~/aztec-monitoring-script-v* | tail -1) && ./start.sh
    ```
 
 3. **Следуйте инструкциям** для:
