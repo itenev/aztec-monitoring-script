@@ -4,20 +4,6 @@ declare -A TRANSLATIONS
 declare -gA STATUS_MAP
 declare -gA STATUS_COLOR
 
-# Function to read and validate a URL
-read_and_validate_url() {
-  local prompt="$1"
-  local url
-  while true; do
-    read -p "$prompt" url
-    if [[ $url =~ ^(https?|ftp)://[^\s/$.?#].[^\s]*$ ]]; then
-      echo "$url"
-      break
-    else
-      echo -e "${RED}Invalid URL format. Please enter a valid URL.${NC}"
-    fi
-  done
-}
 init_languages() {
   echo -e "\n${BLUE}Select language / Выберите язык:${NC}"
   echo -e "1. English"
@@ -679,6 +665,14 @@ init_languages() {
   TRANSLATIONS["en,earliest_rewards_claimable_timestamp"]="Earliest rewards claimable timestamp: %s (%s)"
   TRANSLATIONS["en,claim_function_not_activated"]="Currently the claim function is not activated in contract"
 
+  # Missing keys used by various scripts
+  TRANSLATIONS["en,check_node_running"]="Check that the node is running and the port is accessible"
+  TRANSLATIONS["en,downgrade_no_stable_versions"]="No stable versions found"
+  TRANSLATIONS["en,error_def_hash_mismatch"]="Hashes differ but versions are the same. File may have been modified."
+  TRANSLATIONS["en,error_def_version_unknown"]="One or both versions are unknown; skipping update"
+  TRANSLATIONS["en,gov_found_results"]="Found governanceProposerPayload values:"
+  TRANSLATIONS["en,raw_output"]="Raw output"
+
   # Russian translations
   TRANSLATIONS["ru,welcome"]="Добро пожаловать в скрипт мониторинга ноды Aztec"
   TRANSLATIONS["ru,title"]="========= Главное меню ========="
@@ -1330,6 +1324,14 @@ init_languages() {
   TRANSLATIONS["ru,contract_used"]="Использованный контракт:"
   TRANSLATIONS["ru,earliest_rewards_claimable_timestamp"]="Самая ранняя метка времени для получения наград: %s (%s)"
   TRANSLATIONS["ru,claim_function_not_activated"]="В настоящее время функция клейма неактивирована в контракте"
+
+  # Отсутствующие ключи, используемые различными скриптами
+  TRANSLATIONS["ru,check_node_running"]="Убедитесь, что нода запущена и порт доступен"
+  TRANSLATIONS["ru,downgrade_no_stable_versions"]="Стабильные версии не найдены"
+  TRANSLATIONS["ru,error_def_hash_mismatch"]="Хеши различаются, но версии совпадают. Файл мог быть изменён."
+  TRANSLATIONS["ru,error_def_version_unknown"]="Одна или обе версии неизвестны; пропуск обновления"
+  TRANSLATIONS["ru,gov_found_results"]="Найдены значения governanceProposerPayload:"
+  TRANSLATIONS["ru,raw_output"]="Необработанный вывод"
 
   # Turkish translations
   TRANSLATIONS["tr,welcome"]="Aztec düğüm izleme betiğine hoş geldiniz"
@@ -1983,4 +1985,12 @@ init_languages() {
   TRANSLATIONS["tr,contract_used"]="Kullanılan kontrat:"
   TRANSLATIONS["tr,earliest_rewards_claimable_timestamp"]="En erken ödül talep edilebilir zaman damgası: %s (%s)"
   TRANSLATIONS["tr,claim_function_not_activated"]="Şu anda kontratta talep işlevi etkinleştirilmemiş"
+
+  # Çeşitli betikler tarafından kullanılan eksik anahtarlar
+  TRANSLATIONS["tr,check_node_running"]="Düğümün çalıştığından ve portun erişilebilir olduğundan emin olun"
+  TRANSLATIONS["tr,downgrade_no_stable_versions"]="Kararlı sürüm bulunamadı"
+  TRANSLATIONS["tr,error_def_hash_mismatch"]="Hash'ler farklı ancak sürümler aynı. Dosya değiştirilmiş olabilir."
+  TRANSLATIONS["tr,error_def_version_unknown"]="Bir veya her iki sürüm bilinmiyor; güncelleme atlanıyor"
+  TRANSLATIONS["tr,gov_found_results"]="governanceProposerPayload değerleri bulundu:"
+  TRANSLATIONS["tr,raw_output"]="Ham çıktı"
 }
