@@ -182,7 +182,7 @@ check_dependencies() {
   fi
 
   # Request RPC URL from user and create .env file
-  if [ ! -f .env-aztec-agent ]; then
+  if [ ! -f "$HOME/.env-aztec-agent" ]; then
       echo -e "\n${BLUE}$(t "rpc_prompt")${NC}"
 
       # Запрос RPC URL с проверкой
@@ -211,12 +211,12 @@ check_dependencies() {
       {
           printf 'RPC_URL=%s\n' "$RPC_URL"
           printf 'NETWORK=%s\n' "$NETWORK"
-      } > .env-aztec-agent
-      chmod 600 .env-aztec-agent 2>/dev/null || true
+      } > "$HOME/.env-aztec-agent"
+      chmod 600 "$HOME/.env-aztec-agent" 2>/dev/null || true
 
       echo -e "\n${GREEN}$(t "env_created")${NC}"
   else
-      source .env-aztec-agent
+      source "$HOME/.env-aztec-agent"
       DISPLAY_NETWORK="${NETWORK:-testnet}"
       echo -e "\n${GREEN}$(t "env_exists") $RPC_URL, NETWORK: $DISPLAY_NETWORK${NC}"
   fi

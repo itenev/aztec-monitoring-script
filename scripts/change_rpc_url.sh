@@ -1,6 +1,6 @@
 # === Change RPC URL ===
 change_rpc_url() {
-  ENV_FILE=".env-aztec-agent"
+  ENV_FILE="$HOME/.env-aztec-agent"
 
   echo -e "\n${BLUE}$(t "rpc_change_prompt")${NC}"
   NEW_RPC_URL=$(read_and_validate_url "> ")

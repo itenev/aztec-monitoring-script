@@ -354,19 +354,19 @@ EOF
                             echo -e "${GREEN}📁 $(t "staking_yml_file_created")${NC}" "$YML_FILE"
 
                             # Перезапускаем web3signer для загрузки нового ключа
-                            echo -e "${BLUE}🔄 $(t "staking_restarting_web3signer")${NC}"
+                            echo -e "${BLUE}🔄 $(t "bls_restarting_web3signer")${NC}"
                             if docker restart web3signer > /dev/null 2>&1; then
-                                echo -e "${GREEN}✅ $(t "staking_web3signer_restarted")${NC}"
+                                echo -e "${GREEN}✅ $(t "bls_web3signer_restarted")${NC}"
 
                                 # Проверяем статус web3signer после перезапуска
                                 sleep 3
                                 if docker ps | grep -q web3signer; then
-                                    echo -e "${GREEN}✅ $(t "staking_web3signer_running")${NC}"
+                                    echo -e "${GREEN}✅ $(t "bls_web3signer_running")${NC}"
                                 else
-                                    echo -e "${YELLOW}⚠️ $(t "staking_web3signer_not_running")${NC}"
+                                    echo -e "${YELLOW}⚠️ $(t "bls_web3signer_not_running")${NC}"
                                 fi
                             else
-                                echo -e "${RED}❌ $(t "staking_web3signer_restart_failed")${NC}"
+                                echo -e "${RED}❌ $(t "bls_web3signer_restart_failed")${NC}"
                             fi
                         else
                             echo -e "${RED}⚠️ $(t "staking_yml_file_failed")${NC}" "$YML_FILE"
@@ -382,19 +382,19 @@ EOF
                             # Заменяем старый адрес на новый в keystore.json (регистронезависимо)
                             if jq --arg old_addr_lower "$OLD_VALIDATOR_ADDRESS_LOWER" \
                                   --arg new_addr "$ETH_ATTESTER_ADDRESS" \
-                                  'walk(if type == "object" and has("attester") and (.attester | ascii_downcase) == $old_addr_lower then .attester = $new_addr else . end)' \
+                                  'walk(if type == "object" and has("attester") and ((.attester.eth // "") | ascii_downcase) == $old_addr_lower then .attester.eth = $new_addr else . end)' \
                                   "$KEYSTORE_FILE" > "$TEMP_KEYSTORE"; then
 
                                 # Проверяем, что замена произошла
                                 if jq -e --arg new_addr "$ETH_ATTESTER_ADDRESS" \
-                                         'any(.validators[]; .attester == $new_addr)' "$TEMP_KEYSTORE" > /dev/null; then
+                                         'any(.validators[]; .attester.eth == $new_addr)' "$TEMP_KEYSTORE" > /dev/null; then
 
                                     mv "$TEMP_KEYSTORE" "$KEYSTORE_FILE"
                                     echo -e "${GREEN}✅ $(t "staking_keystore_updated")${NC}" "$OLD_VALIDATOR_ADDRESS → $ETH_ATTESTER_ADDRESS"
 
                                     # Дополнительная проверка: находим все вхождения нового адреса
                                     local MATCH_COUNT=$(jq -r --arg new_addr "$ETH_ATTESTER_ADDRESS" \
-                                                         '[.validators[] | select(.attester == $new_addr)] | length' "$KEYSTORE_FILE")
+                                                         '[.validators[] | select(.attester.eth == $new_addr)] | length' "$KEYSTORE_FILE")
                                     echo -e "${CYAN}🔍 Found $MATCH_COUNT occurrence(s) of new address in keystore${NC}"
 
                                 else
@@ -403,7 +403,7 @@ EOF
 
                                     # Отладочная информация: проверяем наличие старого адреса в keystore
                                     local OLD_ADDR_COUNT=$(jq -r --arg old_addr_lower "$OLD_VALIDATOR_ADDRESS_LOWER" \
-                                                         '[.validators[] | select(.attester | ascii_downcase == $old_addr_lower)] | length' "$KEYSTORE_FILE")
+                                                         '[.validators[] | select((.attester.eth // "") | ascii_downcase == $old_addr_lower)] | length' "$KEYSTORE_FILE")
                                     echo -e "${CYAN}Debug: Found $OLD_ADDR_COUNT occurrence(s) of old address (case-insensitive)${NC}"
 
                                     rm -f "$TEMP_KEYSTORE"
@@ -461,11 +461,11 @@ EOF
         echo -e "${CYAN}$(t "staking_yml_files_location")${NC}" "$KEYS_DIR"
 
         # Финальный перезапуск web3signer для гарантии загрузки всех ключей
-        echo -e "\n${BLUE}🔄 $(t "staking_final_web3signer_restart")${NC}"
+        echo -e "\n${BLUE}🔄 $(t "bls_final_web3signer_restart")${NC}"
         if docker restart web3signer > /dev/null 2>&1; then
-            echo -e "${GREEN}✅ $(t "staking_final_web3signer_restarted")${NC}"
+            echo -e "${GREEN}✅ $(t "bls_final_web3signer_restarted")${NC}"
         else
-            echo -e "${YELLOW}⚠️ $(t "staking_final_web3signer_restart_failed")${NC}"
+            echo -e "${YELLOW}⚠️ $(t "bls_final_web3signer_restart_failed")${NC}"
         fi
     fi
 

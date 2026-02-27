@@ -1,4 +1,13 @@
 # Color codes
+# === hex_to_dec: convert a hex string (with or without 0x prefix) to decimal ===
+hex_to_dec() {
+  local hex=$1
+  hex=${hex#0x}
+  hex=$(echo "$hex" | sed 's/^0*//')
+  [ -z "$hex" ] && echo 0 && return
+  echo $((16#$hex))
+}
+
 # === Spinner function ===
 spinner() {
   local pid=$1

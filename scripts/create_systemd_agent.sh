@@ -93,7 +93,7 @@ create_systemd_agent() {
   fi
 
   # === Проверка и получение VALIDATORS (если NOTIFICATION_TYPE == 2) ===
-  if [ "$NOTIFICATION_TYPE" -eq 2 ] && [ ! -f "$HOME/.env-aztec-agent" ] || ! grep -q "^VALIDATORS=" "$HOME/.env-aztec-agent"; then
+  if [ "$NOTIFICATION_TYPE" -eq 2 ] && { [ ! -f "$HOME/.env-aztec-agent" ] || ! grep -q "^VALIDATORS=" "$HOME/.env-aztec-agent"; }; then
     echo -e "\n${BLUE}$(t "validators_prompt")${NC}"
     echo -e "${YELLOW}$(t "validators_format")${NC}"
     while true; do
