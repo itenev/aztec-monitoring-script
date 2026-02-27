@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          # Strip leading 'v' to get bare version number (e.g. v2.8.1 → 2.8.1)
+          VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify tag matches SCRIPT_VERSION in start.sh
+        run: |
+          SCRIPT_VERSION="$(grep '^SCRIPT_VERSION=' start.sh | head -1 | sed 's/SCRIPT_VERSION=//; s/["\x27]//g')"
+          TAG_VERSION="${{ steps.version.outputs.version }}"
+          if [[ "${SCRIPT_VERSION}" != "${TAG_VERSION}" ]]; then
+            echo "ERROR: Tag version (${TAG_VERSION}) does not match SCRIPT_VERSION in start.sh (${SCRIPT_VERSION})." >&2
+            exit 1
+          fi
+          echo "Version check passed: ${SCRIPT_VERSION}"
+
+      - name: Build distribution tarball
+        run: bash make_dist.sh
+
+      - name: Generate SHA-256 checksum file for the tarball
+        id: checksum
+        run: |
+          TARBALL="aztec-monitoring-script-v${{ steps.version.outputs.version }}.tar.gz"
+          CHECKSUM_FILE="${TARBALL}.sha256"
+          sha256sum "${TARBALL}" > "${CHECKSUM_FILE}"
+          echo "tarball=${TARBALL}" >> "$GITHUB_OUTPUT"
+          echo "checksum_file=${CHECKSUM_FILE}" >> "$GITHUB_OUTPUT"
+          echo "sha256=$(awk '{print $1}' "${CHECKSUM_FILE}")" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Pull the changes array for this version from version_control.json
+          CHANGES="$(jq -r --arg v "$VERSION" '
+            .versions[]
+            | select(.version == $v)
+            | .changes[]
+            | "- " + .
+          ' other/version_control.json 2>/dev/null || true)"
+
+          if [[ -z "${CHANGES}" ]]; then
+            CHANGES="_No changelog entry found for v${VERSION}._"
+          fi
+
+          # Write to a temp file to safely pass multiline content
+          echo "${CHANGES}" > /tmp/changelog_fragment.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: v${{ steps.version.outputs.version }}
+          body_path: /tmp/changelog_fragment.md
+          draft: false
+          prerelease: false
+          files: |
+            ${{ steps.checksum.outputs.tarball }}
+            ${{ steps.checksum.outputs.checksum_file }}
+            SHA256SUMS
