@@ -222,7 +222,7 @@ Add it to /root/.bash_profile to make the aztec binaries accessible?
 | **18-3** | Перенести BLS из `bls-filtered-pk.json` в `keystore.json` | Да |
 | **18-4** | Keystore для дашборда (отдельные файлы в `$HOME/aztec/`) | Нет |
 
-## Troubleshooting
+## Поиск неисправностей
 
 ### RPC от sepolia-auto-install и файрволл (Опция 13)
 
