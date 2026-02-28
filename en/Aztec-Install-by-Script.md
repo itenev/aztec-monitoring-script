@@ -224,7 +224,10 @@ If you specify **more than one** validator identity, the created files will cont
 
 ## Troubleshooting
 
-### RPC from sepolia-auto-install and firewall (Option 13)
+### Aztec node fails to start with RPC from sepolia-auto-install and firewall (Option 13)
+
+<details>
+<summary>Solution</summary>
 
 If your RPC was installed with the [sepolia-auto-install](https://github.com/pittpv/sepolia-auto-install/) script and the firewall is enabled in it (Option 13), you need to allow the Docker network subnet used by the Aztec node. Get the subnet with either:
 
@@ -239,6 +242,8 @@ docker network inspect aztec | jq -r '.[0].IPAM.Config[].Subnet'
 ```
 
 Add the result **including the CIDR mask** (e.g. `172.19.0.0/16`) to the allowed IPs in the RPC script: **Option 13 → 3 → 1**.
+
+</details>
 
 ---
 
