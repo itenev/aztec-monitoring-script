@@ -223,6 +223,26 @@ Düğüm yapılandırmasını değiştirmeden yalnızca staking dashboard (docs.
 | **18-3** | `bls-filtered-pk.json` içeriğini `keystore.json`’a kopyala | Evet |
 | **18-4** | Dashboard keystore’ları (`$HOME/aztec/` içinde ayrı dosyalar) | Hayır |
 
+## Troubleshooting
+
+### sepolia-auto-install RPC ve güvenlik duvarı (Seçenek 13)
+
+RPC, [sepolia-auto-install](https://github.com/pittpv/sepolia-auto-install/) betiği ile kurulduysa ve bu betikte güvenlik duvarı etkinleştirildiyse (Seçenek 13), Aztec düğümünün kullandığı Docker ağının alt ağını izin listesine eklemeniz gerekir. Alt ağı şu komutlardan biriyle öğrenin:
+
+```bash
+docker network inspect -f '{{range .IPAM.Config}}{{.Subnet}}{{end}}' aztec
+```
+
+veya
+
+```bash
+docker network inspect aztec | jq -r '.[0].IPAM.Config[].Subnet'
+```
+
+Sonucu **CIDR maskesiyle birlikte** (örn. `172.19.0.0/16`) RPC betiğindeki izinli IP'lere ekleyin: **Seçenek 13 → 3 → 1**.
+
+---
+
 Düğümünüzü çalıştırırken size istikrarlı çalışma ve başarılar dileriz!
 
 Saygılarımızla,  
