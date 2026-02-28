@@ -224,8 +224,10 @@ Add it to /root/.bash_profile to make the aztec binaries accessible?
 
 ## Поиск неисправностей
 
+### Нода Aztec не запускается с RPC от sepolia-auto-install и файрволлом (Опция 13)
+
 <details>
-<summary>### RPC от sepolia-auto-install и файрволл (Опция 13)</summary>
+<summary>Решение</summary>
 
 Если RPC установлен скриптом [sepolia-auto-install](https://github.com/pittpv/sepolia-auto-install/) и в нём активирован файрволл (Опция 13), нужно разрешить подсеть Docker-сети Aztec. Узнайте подсеть одной из команд:
 
@@ -241,7 +243,7 @@ docker network inspect aztec | jq -r '.[0].IPAM.Config[].Subnet'
 
 Полученный адрес **обязательно с маской** (например, `172.19.0.0/16`) добавьте в разрешённые IP в скрипте RPC: **Опция 13 → 3 → 1**.
 
-<details>
+</details>
 
 ---
 
