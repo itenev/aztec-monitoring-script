@@ -222,6 +222,31 @@ Add it to /root/.bash_profile to make the aztec binaries accessible?
 | **18-3** | Перенести BLS из `bls-filtered-pk.json` в `keystore.json` | Да |
 | **18-4** | Keystore для дашборда (отдельные файлы в `$HOME/aztec/`) | Нет |
 
+## Поиск неисправностей
+
+### Нода Aztec не запускается с RPC от sepolia-auto-install и файрволлом (Опция 13)
+
+<details>
+<summary>Решение</summary>
+
+Если RPC установлен скриптом [sepolia-auto-install](https://github.com/pittpv/sepolia-auto-install/) и в нём активирован файрволл (Опция 13), нужно разрешить подсеть Docker-сети Aztec. Узнайте подсеть одной из команд:
+
+```bash
+docker network inspect -f '{{range .IPAM.Config}}{{.Subnet}}{{end}}' aztec
+```
+
+или
+
+```bash
+docker network inspect aztec | jq -r '.[0].IPAM.Config[].Subnet'
+```
+
+Полученный адрес **обязательно с маской** (например, `172.19.0.0/16`) добавьте в разрешённые IP в скрипте RPC: **Опция 13 → 3 → 1**.
+
+</details>
+
+---
+
 Желаем стабильной работы и успеха в запуске ноды!
 
 С уважением,

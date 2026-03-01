@@ -222,6 +222,31 @@ If you specify **more than one** validator identity, the created files will cont
 | **18-3** | Copy BLS from `bls-filtered-pk.json` into `keystore.json` | Yes |
 | **18-4** | Dashboard keystores (separate files in `$HOME/aztec/`) | No |
 
+## Troubleshooting
+
+### Aztec node fails to start with RPC from sepolia-auto-install and firewall (Option 13)
+
+<details>
+<summary>Solution</summary>
+
+If your RPC was installed with the [sepolia-auto-install](https://github.com/pittpv/sepolia-auto-install/) script and the firewall is enabled in it (Option 13), you need to allow the Docker network subnet used by the Aztec node. Get the subnet with either:
+
+```bash
+docker network inspect -f '{{range .IPAM.Config}}{{.Subnet}}{{end}}' aztec
+```
+
+or
+
+```bash
+docker network inspect aztec | jq -r '.[0].IPAM.Config[].Subnet'
+```
+
+Add the result **including the CIDR mask** (e.g. `172.19.0.0/16`) to the allowed IPs in the RPC script: **Option 13 → 3 → 1**.
+
+</details>
+
+---
+
 We wish you stable operation and success in running your node!
 
 Best regards,  
